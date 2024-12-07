@@ -1,8 +1,14 @@
 # Deep4mC
 Using EL & Dl methods to predict DNA 4mC site.
 
-# Environment requirements
 
+# Updates
+2024/12/7:
+Proposed a method called feature_selection_with_lazypredict, which can evaluate different feature encoding methods,
+based on 3 ML methods testing on 3 species dataset.
+
+
+# Environment requirements
 Python Version=3.6
 
 pip list can be achieved by:
