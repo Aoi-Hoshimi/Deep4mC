@@ -32,21 +32,21 @@ def evaluate_single_with_voting_classifier(X_train, y_train, X_test, y_test):
     clf1 = DecisionTreeClassifier()
     clf2 = LogisticRegression()
     clf3 = KNeighborsClassifier()
-    # 创建VotingClassifier实例，这里采用硬投票方式（也可选择软投票等）
+    # 创建VotingClassifier实例，这里用硬投票
     eclf = VotingClassifier(estimators=[('dt', clf1), ('lr', clf2), ('knn', clf3)], voting='hard')
     eclf.fit(X_train, y_train)
     y_pred = eclf.predict(X_test)
     accuracy = accuracy_score(y_pred, y_test)
     return {
         "Accuracy": accuracy,
-        "Balanced Accuracy": None,  # 如需计算可补充逻辑
-        "ROC AUC": None,  # 如需计算可补充逻辑
-        "F1 Score": None,  # 如需计算可补充逻辑
-        "Time Taken": None  # 可自行添加计时逻辑来记录训练时间等情况
+        "Balanced Accuracy": None, #其他按需添加
+        "ROC AUC": None,
+        "F1 Score": None,
+        "Time Taken": None
     }
 
 
-# 汇总各编码方法在所有数据集上的平均性能，并选择排名最靠前的4种编码方法
+# 汇总各编码方法在所有数据集上的平均性能
 def summarize_encoding_methods_performance(results_list, dataset_names):
     """
     results_list是包含不同数据集对应的模型评估结果的列表
@@ -78,14 +78,14 @@ def summarize_encoding_methods_performance(results_list, dataset_names):
     sorted_methods = sorted(avg_performance.items(), key=lambda x: (x[1] is None, x[1]), reverse=True)
     sorted_methods = [m[0] for m in sorted_methods]
 
-    # 输出每种特征编码在所有数据集上的平均性能（处理None值显示更友好）
+    # 输出每种特征编码在所有数据集上的平均性能
     print("特征编码方法\t平均性能")
     print("----------------------")
     for method in sorted_methods:
         avg_value = avg_performance[method]
         print(f"{method}\t{avg_value if avg_value is not None else '无有效数据'}")
 
-    # 输出每个数据集下各特征编码的性能（表格形式）
+    # 表格输出每个数据集下各特征编码的性能
     print("\n各数据集下特征编码方法的性能：")
     print("\t".join(["特征编码方法"] + dataset_names))
     print("".join(["------" for _ in range(len(dataset_names) + 1)]))

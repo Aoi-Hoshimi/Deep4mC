@@ -7,9 +7,12 @@ Using EL & Dl methods to predict DNA 4mC site.
 Proposed a method called feature_selection_with_lazypredict, which can evaluate different feature encoding methods,
 based on 3 ML methods testing on 3 species dataset.
 
+2024/12/11：
+Created a preliminary CNN PreTraining model and a CatBoost model. Conducted further evaluation and training.
+
 
 # Environment requirements
-Python Version=3.6
+Python Version=3.7
 
 pip list can be achieved by:
 
