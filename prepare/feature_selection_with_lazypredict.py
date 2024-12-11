@@ -65,7 +65,7 @@ def summarize_encoding_methods_performance(results_list, dataset_names):
                 all_scores[method_name] = {}
             all_scores[method_name][dataset_names[index]] = accuracy
 
-    # 计算所有数据集下的平均性能，处理可能存在的None值情况
+    # 计算所有数据集下的平均性能，处理None值情况
     avg_performance = {}
     for method, scores in all_average_scores.items():
         valid_scores = [s for s in scores if s is not None]

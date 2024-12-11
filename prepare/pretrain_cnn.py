@@ -82,7 +82,7 @@ if __name__ == "__main__":
         X_test = np.expand_dims(X_test, axis=1)
         X_test = np.repeat(X_test, 3, axis=1)
 
-        # 创建CNN模型实例，传递正确的输入形状参数
+        # 创建CNN模型实例，传递正确输入参数
         cnn_model = CNNModel(input_shape=(3, X_train.shape[2]))
         num_epochs_cnn = 10  # CNN模型训练的轮数，初步设为10
 
