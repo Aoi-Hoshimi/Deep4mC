@@ -4,10 +4,9 @@ from tensorflow.keras.optimizers import Adam
 from sklearn.base import BaseEstimator, ClassifierMixin
 import numpy as np
 
-
-# 定义基础模型类，继承自BaseEstimator和ClassifierMixin，使其更符合sklearn风格
+# 基础的模型类，继承自BaseEstimator和ClassifierMixin，用于规范模型的基本行为，使其更符合sklearn风格
 class BaseDeepModel(BaseEstimator, ClassifierMixin):
-    def __init__(self, epochs=10, batch_size=32, verbose=0):
+    def __init__(self, epochs=10, batch_size=1024, verbose=0):
         self.epochs = epochs
         self.batch_size = batch_size
         self.verbose = verbose
@@ -22,23 +21,44 @@ class BaseDeepModel(BaseEstimator, ClassifierMixin):
         raise NotImplementedError("Subclasses must implement predict_proba method")
 
 
-# 重新定义CNN模型类，继承自BaseDeepModel
+# CNN模型类，继承自BaseDeepModel
 class CNNModel(BaseDeepModel):
-    def __init__(self, input_shape, epochs=10, batch_size=32, verbose=0):
+    def __init__(self, input_shape, epochs=10, batch_size=1024, verbose=0, dropout_rate=0.3):
         super(CNNModel, self).__init__(epochs, batch_size, verbose)
         self.input_shape = input_shape
+        self.dropout_rate = dropout_rate
         self.model = self._build_model()
 
     def _build_model(self):
         model = Sequential()
-        model.add(Conv1D(32, kernel_size=3, activation='tanh', input_shape=self.input_shape))
-        model.add(MaxPooling1D(pool_size=1, strides=1))
+        # 添加卷积层和池化层
+        model.add(Conv1D(8, kernel_size=3, activation='relu', input_shape=self.input_shape, padding='same'))
+        model.add(MaxPooling1D(pool_size=2, strides=2, padding='same'))
+        model.add(Dropout(self.dropout_rate))  # 添加Dropout以减少过拟合
+
+        # 再添加一组卷积层和池化层
+        model.add(Conv1D(16, kernel_size=3, activation='relu', padding='same'))
+        model.add(MaxPooling1D(pool_size=2, strides=2, padding='same'))
+        model.add(Dropout(self.dropout_rate))
+
+        # 展平
         model.add(Flatten())
-        model.add(Dense(64, activation='tanh'))
-        model.add(Dense(32, activation='tanh'))
-        model.add(Dense(1, activation='sigmoid'))
-        model.compile(loss='binary_crossentropy', optimizer=Adam(), metrics=['accuracy'])
+
+        # 添加全连接层
+        model.add(Dense(32, activation='relu'))
+        model.add(Dropout(self.dropout_rate))
+        model.add(Dense(16, activation='relu'))
+        model.add(Dropout(self.dropout_rate))
+        model.add(Dense(1, activation='sigmoid'))  # 输出层
+
+        # 编译模型
+        model.compile(
+            loss='binary_crossentropy',
+            optimizer=Adam(learning_rate=0.001),
+            metrics=['accuracy']
+        )
         return model
+
 
     def fit(self, X, y):
         self.model.fit(X, y, epochs=self.epochs, batch_size=self.batch_size, verbose=self.verbose)

@@ -1,5 +1,5 @@
 # Deep4mC
-Using EL & Dl methods to predict DNA 4mC site.
+Using EL & DL methods to predict DNA 4mC sites.
 
 
 # Updates
@@ -16,9 +16,16 @@ Pretrained CNN and Transformer model.(Pre-trained models have beem saved at 'pre
 Created an ensemble model based on stacking.
 Uploaded the figure of the overall structure of proposed model.
 
+2024/12/24
+Deployed the project to a Linux environment.
+Changed the tensorflow environment to tensorflow-gpu environment
+Created a B-LSTM model & Stacking-CNN-BLSTM models.
+Pretrained CNN, Transformer model and Stacking models.
+
+
 # Environment requirements
-Python Version=3.7
+python=3.8, tensorflow-gpu=2.5.0, cuda≥11.2
 
-pip list can be achieved by:
+conda environments can be loaded by:
 
-pip install -r requirements.txt
+conda env create -f environment.yml
